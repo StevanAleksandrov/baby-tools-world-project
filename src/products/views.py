@@ -50,6 +50,7 @@ def product_detail(request, category_slug, pk):
                     comment.text = text
                     comment.save()
                 messages.success(request, "Your rating was {}.".format("submitted" if created else "updated"))
+                request.session["clear_comment_form"] = True
             else:
                 # Guest: create a new comment (no uniqueness constraint)
                 comment = form.save(commit=False)
@@ -58,13 +59,16 @@ def product_detail(request, category_slug, pk):
                 messages.success(request, "Thank you for your rating.")
 
             return redirect("product_detail", category_slug=category_slug, pk=product.pk)
+
     else:
-        # Pre-fill form for authenticated user with existing comment (if any)
         initial = {}
-        if request.user.is_authenticated:
+        clear_comment_form = request.session.pop("clear_comment_form", False)
+
+        if request.user.is_authenticated and not clear_comment_form:
             existing = product.comments.filter(user=request.user).first()
             if existing:
                 initial = {"rating": existing.rating, "text": existing.text}
+
         form = CommentForm(initial=initial)
 
     return render(
