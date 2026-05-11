@@ -129,6 +129,21 @@ To run the complete Django test suite, navigate to the `src` directory and execu
 python manage.py test
 ```
 
+## Code Quality
+
+Run the formatting and linting checks from the project root directory:
+
+```bash
+black --check .
+isort --check-only .
+flake8 .
+```
+To format the Python code, run:
+```bash
+black .
+isort .
+```
+
 ## Docker 
 
 Build the container image from the project root directory:
@@ -140,3 +155,4 @@ Run the containerized application:
 ```bash
 docker run --rm -it -p 8000:8000 --env-file src/.env baby-tools-world:local
 ```
+
