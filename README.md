@@ -7,6 +7,7 @@ This version adds product tags that can be managed through the Django admin pane
 ## Table of Contents
 
 - [Quickstart](#quickstart)
+- [Deployed Application](#deployed-application)
 - [Usage](#usage)
 - [Testing](#testing)
 - [Code Quality](#code-quality)
@@ -103,6 +104,14 @@ The application is available at:
 http://127.0.0.1:8000
 ```
 
+## Deployed Application
+
+The application is currently available on the project VM at:
+
+```text
+http://46.225.103.211:8080/
+```
+
 ## Usage
 
 ### Admin Panel
@@ -126,6 +135,7 @@ The admin panel can be used to manage:
 - Tags
 - Customer comments
 - User accounts
+
 
 ### Product Tags
 
