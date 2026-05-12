@@ -1,105 +1,125 @@
 # Baby Tools World
 
-Baby Tools World is a Django-powered e-commerce platform specializing in baby products and accessories.  
-The application offers intuitive product browsing, detailed product pages, category navigation, user authentication, and customer reviews.  
-This version includes a flexible tagging system for products, fully manageable through the Django admin interface.
+Baby Tools World is a Django-based shop application for baby products and product categories.  
+The application provides product listings, product detail pages, category navigation, user authentication, and customer reviews.  
+This version adds product tags that can be managed through the Django admin panel and displayed on product detail pages.
+
+## Table of Contents
+
+- [Quickstart](#quickstart)
+- [Usage](#usage)
+- [Testing](#testing)
+- [Code Quality](#code-quality)
+- [Docker](#docker)
+- [Git Workflow](#git-workflow)
 
 ## Quickstart
 
-### What You'll Need
+### Prerequisites
 
-Before setting up the project locally, please ensure you have:
+Before running the project locally, make sure the following tools are installed:
 
-- Python installed
+- Python
 - Git
-- Docker (or any OCI-compliant container engine)
-- Your preferred code editor or IDE
+- Docker or another OCI-compliant container engine
+- Code editor or IDE
 
-### Setting Up Locally
+### Local Setup
 
-First, clone the repository and move into the project directory:
+1. Clone the repository and move into the project directory:
 
 ```bash
 git clone <repository-url>
 cd baby-tools-world-project
 ```
 
-Create a virtual environment:
+2. Create a virtual environment:
 
 ```bash
 python -m venv my-venv
 ```
 
-Activate the virtual environment:
+3. Activate the virtual environment.
 
-**Windows PowerShell:**
+Windows PowerShell:
 
-```bash
+```powershell
 .\my-venv\Scripts\Activate.ps1
 ```
 
-**macOS / Linux:**
+macOS / Linux:
+
 ```bash
 source my-venv/bin/activate
 ```
 
-Install all required dependencies:
+4. Install all required dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Set up your local environment configuration:
+5. Set up the local environment configuration.
 
-**Windows PowerShell:**
+Windows PowerShell:
 
-```bash
+```powershell
 Copy-Item example.env src\.env
 ```
 
-**macOS/Linux:**
+macOS / Linux:
+
 ```bash
 cp example.env src/.env
 ```
 
-Navigate to the Django source directory:
+6. Navigate to the Django source directory:
 
 ```bash
 cd src
 ```
 
-Run database migrations:
+7. Run database migrations:
 
 ```bash
 python manage.py migrate
 ```
 
-Load sample data to get started:
+8. Load sample data to get started:
+
 ```bash
 python manage.py seed_db
 ```
 
-Launch the development server:
+9. Launch the development server:
 
 ```bash
 python manage.py runserver
 ```
 
-You can now access the application at: `http://127.0.0.1:8000`
+The application is available at:
+
+```text
+http://127.0.0.1:8000
+```
 
 ## Usage
 
 ### Admin Panel
 
-To create a Django superuser account, run:
+A Django superuser can be created with:
 
 ```bash
 python manage.py createsuperuser
 ```
 
-Access the admin panel at: `http://127.0.0.1:8000/admin`
+The admin panel is available at:
 
-Through the admin panel, you can manage:
+```text
+http://127.0.0.1:8000/admin
+```
+
+The admin panel can be used to manage:
 
 - Products
 - Categories
@@ -109,21 +129,25 @@ Through the admin panel, you can manage:
 
 ### Product Tags
 
-Products can be associated with multiple tags directly from the Django admin panel.
+Products can be associated with one or more tags through the Django admin panel.
 
-On each product detail page, assigned tags appear below the rating summary and above the purchase button.
+On the product detail page, assigned tags are displayed below the rating summary and above the buy button.
 
-If no tags are assigned to a product, the page will display: `no tags available`
+If no tags are assigned to a product, the page displays:
+
+```text
+no tags available
+```
 
 ### Customer Reviews
 
-Both registered users and guests can submit product reviews, including a star rating and an optional written comment.
+Registered users and guests can submit product reviews with a star rating and an optional comment.
 
-Once a review is successfully submitted, the rating selection and comment field automatically reset for convenience.
+After a review has been submitted successfully, the rating selection and comment field are cleared.
 
 ## Testing
 
-To run the complete Django test suite, navigate to the `src` directory and execute:
+Run the Django test suite from the `src` directory:
 
 ```bash
 python manage.py test
@@ -138,21 +162,43 @@ black --check .
 isort --check-only .
 flake8 .
 ```
+
 To format the Python code, run:
+
 ```bash
 black .
 isort .
 ```
 
-## Docker 
+## Docker
 
 Build the container image from the project root directory:
+
 ```bash
 docker build -t baby-tools-world:local .
 ```
 
 Run the containerized application:
+
 ```bash
 docker run --rm -it -p 8000:8000 --env-file src/.env baby-tools-world:local
 ```
 
+The application is available at:
+
+```text
+http://127.0.0.1:8000
+```
+
+## Git Workflow
+
+Development is done on a dedicated feature branch.
+
+For this implementation, the feature branch is:
+
+```text
+add-product-tags
+```
+
+Changes are committed locally, pushed to GitHub, and reviewed through a Pull Request.  
+The automated pipeline must pass successfully before the review process is completed.
