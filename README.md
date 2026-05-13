@@ -1,13 +1,12 @@
 # Baby Tools World
 
 Baby Tools World is a Django-based shop application for baby products and product categories.  
-The application provides product listings, product detail pages, category navigation, user authentication, and customer reviews.  
-This version adds product tags that can be managed through the Django admin panel and displayed on product detail pages.
+The application provides product listings, product detail pages, category navigation, user authentication, and customer reviews. This version adds product tags that can be managed through the Django admin panel and displayed on product detail pages.  
+The project is fully containerized and runs with Docker.
 
 ## Table of Contents
 
 - [Quickstart](#quickstart)
-- [Deployed Application](#deployed-application)
 - [Usage](#usage)
 - [Testing](#testing)
 - [Code Quality](#code-quality)
@@ -18,124 +17,80 @@ This version adds product tags that can be managed through the Django admin pane
 
 ### Prerequisites
 
-Before running the project locally, make sure the following tools are installed:
+Before running the project, make sure the following tools are installed:
 
-- Python
 - Git
-- Docker or another OCI-compliant container engine
-- Code editor or IDE
+- Docker
 
-### Local Setup
+### Start the Application
 
-1. Clone the repository and move into the project directory:
+1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:StevanAleksandrov/baby-tools-world-project.git
+```
+
+2. Navigate into the project directory:
+
+```bash
 cd baby-tools-world-project
 ```
 
-2. Create a virtual environment:
-
-```bash
-python -m venv my-venv
-```
-
-3. Activate the virtual environment.
-
-Windows PowerShell:
-
-```powershell
-.\my-venv\Scripts\Activate.ps1
-```
-
-macOS / Linux:
-
-```bash
-source my-venv/bin/activate
-```
-
-4. Install all required dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-5. Set up the local environment configuration.
-
-Windows PowerShell:
-
-```powershell
-Copy-Item example.env src\.env
-```
-
-macOS / Linux:
+3. Create the environment file from the example:
 
 ```bash
 cp example.env src/.env
 ```
 
-6. Navigate to the Django source directory:
+4. Build the Docker image:
 
 ```bash
-cd src
+docker build -t baby-tools-world:local .
 ```
 
-7. Run database migrations:
+5. Start the container:
 
 ```bash
-python manage.py migrate
+docker run --rm -d --name baby-tools-world -p 8000:8000 --env-file src/.env baby-tools-world:local
 ```
 
-8. Load sample data to get started:
-
-```bash
-python manage.py seed_db
-```
-
-9. Launch the development server:
-
-```bash
-python manage.py runserver
-```
-
-The application is available at:
+6. Open the application in your browser:
 
 ```text
 http://127.0.0.1:8000
 ```
 
-## Deployed Application
-
-The application is currently available on the project VM at:
-
-```text
-http://46.225.103.211:8080/
-```
-
 ## Usage
+
+### Seed the Database
+
+To load sample data into the database, run the seed command inside the running container:
+
+```bash
+docker exec -it baby-tools-world sh -c "cd /app/src && python manage.py seed_db"
+```
 
 ### Admin Panel
 
-A Django superuser can be created with:
+Create a Django superuser inside the running container:
 
 ```bash
-python manage.py createsuperuser
+docker exec -it baby-tools-world sh -c "cd /app/src && python manage.py createsuperuser"
 ```
 
-The admin panel is available at:
+Access the admin panel at:
 
 ```text
-http://127.0.0.1:8000/admin
+http://127.0.0.1:8000/admin/
 ```
 
-The admin panel can be used to manage:
+Through the admin panel, you can manage:
 
 - Products
 - Categories
 - Tags
 - Customer comments
 - User accounts
-
 
 ### Product Tags
 
@@ -155,49 +110,64 @@ Registered users and guests can submit product reviews with a star rating and an
 
 After a review has been submitted successfully, the rating selection and comment field are cleared.
 
+
 ## Testing
 
-Run the Django test suite from the `src` directory:
+Run the Django test suite inside the running container:
 
 ```bash
-python manage.py test
+docker exec -it baby-tools-world sh -c "cd /app/src && python manage.py test"
 ```
 
 ## Code Quality
 
-Run the formatting and linting checks from the project root directory:
+Run formatting and linting checks inside the running container:
 
 ```bash
-black --check .
-isort --check-only .
-flake8 .
+docker exec -it baby-tools-world sh -c "cd /app && black --check ."
+docker exec -it baby-tools-world sh -c "cd /app && isort --check-only ."
+docker exec -it baby-tools-world sh -c "cd /app && flake8 ."
 ```
 
-To format the Python code, run:
+To format the Python code:
 
 ```bash
-black .
-isort .
+docker exec -it baby-tools-world sh -c "cd /app && black ."
+docker exec -it baby-tools-world sh -c "cd /app && isort ."
 ```
 
 ## Docker
 
-Build the container image from the project root directory:
+### Show Running Containers
+
+```bash
+docker ps
+```
+
+### View Container Logs
+
+```bash
+docker logs baby-tools-world
+```
+
+### Stop the Container
+
+```bash
+docker stop baby-tools-world
+```
+
+### Rebuild the Image
+
+If the source code changes, rebuild the image:
 
 ```bash
 docker build -t baby-tools-world:local .
 ```
 
-Run the containerized application:
+Then start the container again:
 
 ```bash
-docker run --rm -it -p 8000:8000 --env-file src/.env baby-tools-world:local
-```
-
-The application is available at:
-
-```text
-http://127.0.0.1:8000
+docker run --rm -d --name baby-tools-world -p 8000:8000 --env-file src/.env baby-tools-world:local
 ```
 
 ## Git Workflow
@@ -210,5 +180,6 @@ For this implementation, the feature branch is:
 add-product-tags
 ```
 
-Changes are committed locally, pushed to GitHub, and reviewed through a Pull Request.  
+Changes are committed locally, pushed to GitHub, and reviewed through a Pull Request.
+
 The automated pipeline must pass successfully before the review process is completed.
